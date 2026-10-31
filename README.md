@@ -158,6 +158,29 @@ These four numbers are GitHub Pages' own addresses. DNS changes usually work wit
 Connect the GitHub repository. Netlify reads `netlify.toml`, runs `python build.py` and publishes `site/`.
 Keep the GitHub workflow running so `data/rates.json` gets new prices. Netlify then rebuilds on every new commit.
 
+## Nightly check (9 PM IST)
+
+`tools/daily_check.py` checks the live site:
+- every page in the sitemap opens
+- prices are dated today
+- 22K and 18K follow from the 24K rate
+- the live page matches the saved data
+- the latest GitHub price update passed
+- with `--ref-24k` and `--ref-silver`, how far our Chennai price is from the market rate (limits ±2% gold, ±3% silver)
+
+```bash
+python tools/daily_check.py --ref-24k 13888 --ref-silver 200000
+```
+
+A Claude scheduled task, **"Gold Pulse 9 PM site check"** (`goldpulse-nightly-check`), runs this every night at
+9 PM using that day's Chennai rates. It fixes safe problems itself and tells you what it found:
+- it fetches prices again if an update failed
+- it rebuilds the site if the live page is old
+- it recalibrates the premium if the gap is too big; a premium change of more than 10 points is reported to you instead
+
+Reports are saved in `checks/` (not uploaded to GitHub). The task runs while the Claude app is open; if the app is
+closed at 9 PM, it runs the next time the app opens.
+
 ## Getting ready for AdSense
 
 AdSense has no fixed "number of pages" rule. Google looks for **useful, original content**, clear site pages
