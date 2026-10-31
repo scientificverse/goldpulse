@@ -1,0 +1,28 @@
+{
+  "site_name": "Gold Pulse",
+  "tagline": "Today's gold and silver price, city by city",
+  "site_url": "https://goldpulse.co.in",
+  "contact_email": "teraversestudio@gmail.com",
+  "ad_placeholders": true,
+  "featured_city": "chennai",
+  "price_feed": "metalpriceapi",
+  "premium_percent": 9.0,
+  "silver_premium_percent": 9.0,
+  "gst_percent": 3,
+  "default_making_percent": 12,
+  "update_times_ist": ["10:00 AM", "2:00 PM", "6:00 PM"],
+  "cities": [
+    {"slug": "chennai", "name": "Chennai", "state": "Tamil Nadu", "offset": 0, "silver_offset": 0, "market": "T. Nagar"},
+    {"slug": "coimbatore", "name": "Coimbatore", "state": "Tamil Nadu", "offset": 0, "silver_offset": 0, "market": ""},
+    {"slug": "madurai", "name": "Madurai", "state": "Tamil Nadu", "offset": 0, "silver_offset": 0, "market": ""},
+    {"slug": "bengaluru", "name": "Bengaluru", "state": "Karnataka", "offset": 0, "silver_offset": 0, "market": "Nagarathpet"},
+    {"slug": "hyderabad", "name": "Hyderabad", "state": "Telangana", "offset": 0, "silver_offset": 0, "market": "Charminar area"},
+    {"slug": "kerala", "name": "Kerala", "state": "Kerala", "offset": 0, "silver_offset": 0, "market": "Thrissur"},
+    {"slug": "mumbai", "name": "Mumbai", "state": "Maharashtra", "offset": 0, "silver_offset": 0, "market": "Zaveri Bazaar"},
+    {"slug": "pune", "name": "Pune", "state": "Maharashtra", "offset": 0, "silver_offset": 0, "market": "Laxmi Road"},
+    {"slug": "delhi", "name": "Delhi", "state": "Delhi", "offset": 0, "silver_offset": 0, "market": "Dariba Kalan"},
+    {"slug": "kolkata", "name": "Kolkata", "state": "West Bengal", "offset": 0, "silver_offset": 0, "market": "Bowbazar"},
+    {"slug": "ahmedabad", "name": "Ahmedabad", "state": "Gujarat", "offset": 0, "silver_offset": 0, "market": "Manek Chowk"},
+    {"slug": "jaipur", "name": "Jaipur", "state": "Rajasthan", "offset": 0, "silver_offset": 0, "market": "Johari Bazaar"}
+  ]
+}

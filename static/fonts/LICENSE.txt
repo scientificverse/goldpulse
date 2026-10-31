@@ -1,0 +1,6 @@
+Fonts in this folder are free fonts under the SIL Open Font License 1.1 (https://openfontlicense.org):
+
+- Cinzel (cinzel-*.woff2), by Natanael Gama. Used for headings.
+- Plus Jakarta Sans (jakarta-*.woff2), by Tokotype. Used for body text.
+
+They were downloaded once from Google Fonts and are served from this site, so pages make no outside font requests.

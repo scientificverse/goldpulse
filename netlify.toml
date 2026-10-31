@@ -1,0 +1,4 @@
+# Netlify: build with plain Python (no npm). Security headers come from _headers.
+[build]
+  command = "python build.py"
+  publish = "site"

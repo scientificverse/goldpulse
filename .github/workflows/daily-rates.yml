@@ -1,0 +1,58 @@
+# Three times a day: get the new gold and silver price, save it, rebuild the site and publish it on GitHub Pages.
+# GitHub can start scheduled runs 5-30 minutes late when it is busy; that is normal.
+name: Gold and silver rates
+
+on:
+  schedule:
+    - cron: "30 4,8,12 * * *"   # 04:30, 08:30, 12:30 UTC = 10:00 AM, 2:00 PM, 6:00 PM India time
+  workflow_dispatch:        # "Run workflow" button on the Actions tab
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-rates
+  cancel-in-progress: false
+
+jobs:
+  update-and-publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Get the gold and silver price
+        if: github.event_name != 'push'
+        env:
+          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+          METALPRICEAPI_KEY: ${{ secrets.METALPRICEAPI_KEY }}
+        run: python tools/update_rates.py fetch --skip-if-no-key
+
+      - name: Save the new price
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "rates-bot"
+          git config user.email "rates-bot@users.noreply.github.com"
+          git add data/rates.json
+          git diff --cached --quiet || git commit -m "Gold rates $(TZ=Asia/Kolkata date '+%F %H:%M') IST"
+          git push
+
+      - name: Build the site
+        run: python build.py
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
