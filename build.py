@@ -363,7 +363,7 @@ def page(path, section, title, description, body):
       <a href="about.html">About</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a>
       <a href="terms.html">Terms</a><a href="contact.html">Contact</a>
     </nav>
-    <p class="foot-copy">© {year} {E(SITE)}</p>
+    <p class="foot-copy">© {year} {E(SITE)} · Run by Teraverse Studio, India</p>
   </div>
 </footer>
 </body>
@@ -1038,7 +1038,7 @@ def guide_pages():
 <header class="page-head">
   <p class="eyebrow">{E(g["topic"])}</p>
   <h1>{E(g["title"])}</h1>
-  <p class="meta">Updated <time datetime="{updated}">{long_date(updated)}</time> · {minutes} min read · By the {E(SITE)} team</p>
+  <p class="meta">Updated <time datetime="{updated}">{long_date(updated)}</time> · {minutes} min read · By the {E(SITE)} team at Teraverse Studio</p>
 </header>
 {feat_box}
 <article class="prose guide">
@@ -1178,6 +1178,10 @@ Every shop sets its own price, so always check with your jeweller before you buy
 <h2>Our guides</h2>
 <p>Our guides are written to help ordinary buyers understand purity, hallmarks, making charges, taxes and selling.
 Each guide shows the date it was last updated. If you find a mistake, please <a href="contact.html">tell us</a> and we'll fix it.</p>
+<h2>Who runs Gold Pulse</h2>
+<p>Gold Pulse is run by <strong>Teraverse Studio</strong>, an independent studio in India that makes websites and mobile games.
+We built Gold Pulse to give families one simple, honest place to check gold and silver prices before they visit a jeweller.</p>
+<p>Questions, corrections or ideas: <a href="mailto:{email}">{email}</a></p>
 <h2>Independence</h2>
 <p>We are not a jewellery shop and we don't sell gold. We are not paid by any jeweller to show their prices.</p>
 """, f"About {SITE}: how we work out daily gold and silver rates.")
@@ -1211,7 +1215,7 @@ for security. We do not sell or share any personal information.</p>
 <p>Prices, charts, calculators and guides are provided for general information. They may contain errors or delays.
 Do not rely on them alone for buying, selling or investing.</p>
 <h2>Content</h2>
-<p>The text, charts and design of this site belong to {E(SITE)}. You may share links to any page. Please don't copy whole
+<p>The text, charts and design of this site belong to Teraverse Studio, which runs {E(SITE)}. You may share links to any page. Please don't copy whole
 pages or guides to other websites without permission.</p>
 <h2>Links to other sites</h2>
 <p>Some pages link to other websites, such as Google's ad settings. We are not responsible for their content.</p>
