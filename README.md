@@ -72,28 +72,35 @@ To make new sample data, run `python tools/update_rates.py demo`.
 
 ## Getting real prices: pick one way
 
-### A) Automatic, 3 times a day (recommended)
+### A) Automatic, 3 times a day (in use now)
 
-Each run needs the gold **and** silver price. Pick a price feed in `config.json` → `"price_feed"`:
+`config.json` → `"price_feed": "free"`. This needs **no key and no sign-up**:
 
-| Feed | Key name | Requests per run | 3 runs a day for a month |
-|---|---|---|---|
-| `"goldapi"` (goldapi.io) | `GOLDAPI_KEY` | 2 (gold + silver) | about 186. The free plan (100/month) is **not enough**, so a paid plan is needed |
-| `"metalpriceapi"` (metalpriceapi.com) | `METALPRICEAPI_KEY` | 1 (both together) | about 93, which fits a 100/month free plan |
+| Source | Gives | Updated |
+|---|---|---|
+| api.gold-api.com | World gold and silver price (US$ per ounce) | Live |
+| open.er-api.com | US$ → ₹ rate | Once a day |
 
-Check each site's current plans and limits before choosing.
+Each run makes 3 small requests. There is no monthly limit. If a source is down, the run stops and the site keeps its last prices.
+Free services can change without notice, so check now and then that "Updated …" on the site shows today's date.
 
-1. Get a key from the feed you picked and set `"price_feed"` in `config.json`.
-2. Calibrate once. Ask your local jeweller, or check a trusted rate site, for today's 24K gold rate per gram and
-   the silver rate per kg, then run:
-   ```powershell
-   $env:METALPRICEAPI_KEY = "your-key"
-   python tools/update_rates.py calibrate 14226
-   python tools/update_rates.py calibrate-silver 210000
-   ```
-   This sets `premium_percent` and `silver_premium_percent` in `config.json`: the gap between the world price
-   and the Indian price (import duty and the local premium).
-3. Test it: `python tools/update_rates.py fetch`, then `python build.py`.
+Other feeds you can switch to in `config.json` (each needs a key in a GitHub secret):
+
+| Feed | Key name | Note |
+|---|---|---|
+| `"metalpriceapi"` | `METALPRICEAPI_KEY` | Free plan is **daily only** (one price a day, up to a day old); paid plans are fresher |
+| `"goldapi"` | `GOLDAPI_KEY` | 2 requests per run; free plan (100/month) is not enough for 3 runs a day |
+
+**Calibrating (already done on 31 Oct 2026** against Chennai: 24K ₹13,888/g and silver ₹2,00,000/kg, giving
+`premium_percent` 17.21 and `silver_premium_percent` 32.84). Redo it if the site's prices drift away from your local
+rate, for example after an import-duty change in a Budget:
+```bash
+python tools/update_rates.py calibrate 13888
+```
+```bash
+python tools/update_rates.py calibrate-silver 200000
+```
+(Use that day's local 24K rate per gram and silver rate per kg.) Then commit and push `config.json`.
 
 ### B) Type the rate yourself
 
@@ -119,8 +126,8 @@ few rupees different, put that gap in its `"offset"` (gold, ₹ per gram) or `"s
 
 1. Make a new GitHub repository and upload everything in this folder **except `site/`**.
 2. Repository → **Settings → Pages → Source: GitHub Actions**.
-3. Repository → **Settings → Secrets and variables → Actions → New repository secret**:
-   name `METALPRICEAPI_KEY` (or `GOLDAPI_KEY`), value = your key.
+3. No secret is needed with the `"free"` feed. (Only for a keyed feed: Settings → Secrets and variables →
+   Actions → New repository secret, named `METALPRICEAPI_KEY` or `GOLDAPI_KEY`.)
 4. **Actions** tab → "Gold and silver rates" → **Run workflow**. From then on it runs at 10:00 AM, 2:00 PM and 6:00 PM India time.
    GitHub sometimes starts scheduled runs 5–30 minutes late. That is normal.
 5. `config.json` → `site_url` is already set to `https://goldpulse.co.in` (used in the sitemap, robots.txt and page links for Google).
@@ -162,7 +169,7 @@ Before you apply:
 - [x] `site_url` is `https://goldpulse.co.in` and the contact email is teraversestudio@gmail.com
 - [ ] Connect the domain (steps above) and make sure `https://goldpulse.co.in` opens with the padlock
 - [ ] Set `"ad_placeholders": false` in `config.json` so reviewers don't see empty dashed boxes
-- [ ] Switch to real prices. The yellow sample note disappears by itself. **Don't apply while it shows sample prices.**
+- [x] Real prices are on (free feed, since 31 Oct 2026); the sample note is gone
 - [ ] Add your own name (or business name) and a line about yourself to the About page in `build.py` → `legal_pages()`
 - [ ] Put the site on its own domain (for example a `.in` or `.com`) and submit `https://<your-site>/sitemap.xml` in Google Search Console
 - [ ] Wait until Google has indexed most pages, then apply
