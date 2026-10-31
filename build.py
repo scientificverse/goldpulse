@@ -146,12 +146,6 @@ def silver_url(c):
 GOLD_UNITS = [(1, "1 g", "gram"), (8, "8 g (1 pavan)", "8 grams (1 pavan)"), (10, "10 g", "10 grams"),
               (11.6638, "1 tola", "tola"), (100, "100 g", "100 grams"), (1000, "1 kg", "kg")]
 SILVER_UNITS = [(1, "1 g", "gram"), (10, "10 g", "10 grams"), (100, "100 g", "100 grams"), (1000, "1 kg", "kg")]
-EMBLEM = """<svg class="brand-emblem" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-<defs><linearGradient id="emb" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#fff3b0"/><stop offset=".35" stop-color="#fed053"/><stop offset=".7" stop-color="#d4af37"/><stop offset="1" stop-color="#8c6615"/></linearGradient></defs>
-<circle cx="20" cy="20" r="18" stroke="url(#emb)" stroke-width="1.8" stroke-dasharray="2,3"/>
-<polygon points="20,4 24,14 35,14 26,21 30,32 20,25 10,32 14,21 5,14 16,14" fill="url(#emb)" fill-opacity=".25" stroke="url(#emb)" stroke-width="1.5"/>
-<circle cx="20" cy="20" r="6" fill="url(#emb)"/><circle cx="20" cy="20" r="2.5" fill="#0a0d14"/></svg>"""
 
 
 UNIT = {"mult": 10, "label": "10 grams"}   # weight the current page's prices start in
@@ -341,7 +335,7 @@ def page(path, section, title, description, body):
 </div>
 <header class="top">
   <div class="wrap top-in">
-    <a class="brand" href="index.html">{EMBLEM}<span class="brand-text"><span class="brand-name gold-text">{E(SITE)}</span><span class="brand-sub">India gold &amp; silver prices</span></span></a>
+    <a class="brand" href="index.html"><span class="brand-text"><span class="brand-name gold-text">{E(SITE)}</span><span class="brand-sub">India gold &amp; silver prices</span></span></a>
     <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
     <nav class="nav" id="main-nav" aria-label="Main">{links}</nav>
   </div>

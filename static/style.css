@@ -117,7 +117,6 @@ html:not(.js) .ticker ul[aria-hidden] { display: none; }
 .top { background: var(--bg-card); border-bottom: 1px solid var(--border-subtle); }
 .top-in { display: flex; align-items: center; justify-content: space-between; gap: 10px 24px; padding-top: 10px; padding-bottom: 10px; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.brand-emblem { width: 38px; height: 38px; filter: drop-shadow(0 0 6px rgba(229, 184, 66, .4)); }
 .brand-text { display: flex; flex-direction: column; }
 .brand-name { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; letter-spacing: .12em; line-height: 1; text-transform: uppercase; }
 .brand-sub { font-size: .6rem; font-weight: 700; letter-spacing: .22em; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; }
@@ -454,7 +453,6 @@ section.prose { margin-top: 44px; }
   .rates .chg { font-size: .72rem; }
   .chart .ylab, .chart .xlab { font-size: 19px; }
   .brand-name { font-size: 1.15rem; }
-  .brand-emblem { width: 32px; height: 32px; }
   .chips { flex-wrap: nowrap; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .chips::-webkit-scrollbar { display: none; }
   .chips button { flex: none; padding: 6px 11px; font-size: .8rem; }
