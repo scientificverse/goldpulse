@@ -8,8 +8,9 @@
       Get the world gold and silver price now and work out every city's rate
       (premium_percent / silver_premium_percent + city offsets).
       Feed is set by "price_feed" in config.json:
+        "free"          no key: gold-api.com (live) + open.er-api.com (rupee rate, daily)
         "goldapi"       key in GOLDAPI_KEY        (2 requests per run)
-        "metalpriceapi" key in METALPRICEAPI_KEY  (1 request per run)
+        "metalpriceapi" key in METALPRICEAPI_KEY  (1 request per run; free plan is daily only)
       Runs 3 times a day. Each run is kept in that day's "u" (updates) list,
       and the day's main price is always the latest one.
 
@@ -118,6 +119,8 @@ def real_rates():
 # ---------- price feeds: each returns (gold 24K Rs/gram, silver Rs/gram) ----------
 
 def api_key(cfg, quiet=False):
+    if cfg["price_feed"] == "free":
+        return "no-key-needed"
     name = {"goldapi": "GOLDAPI_KEY", "metalpriceapi": "METALPRICEAPI_KEY"}[cfg["price_feed"]]
     key = os.environ.get(name, "").strip()
     if not key and not quiet:
@@ -147,20 +150,56 @@ def goldapi_per_gram(key, metal):
     return float(per_gram)
 
 
-def metalpriceapi_per_gram(key):
-    data = get_json(f"https://api.metalpriceapi.com/v1/latest?api_key={key}&base=INR&currencies=XAU,XAG")
+def metalpriceapi_parse(data):
+    """(gold, silver) in Rs per gram from a metalpriceapi /v1/latest reply with base USD.
+
+    Documented shape: {"success": true, "base": "USD", "rates": {"INR": 95.2, "XAU": 0.000257,
+    "USDXAU": 3879.6, ...}}. A plain key is units per 1 USD (XAU = ounces per dollar); a "USD"+key
+    is the reverse (USDXAU = dollars per ounce). Errors come back as
+    {"success": false, "error": {"code": 102, "info": "..."}}.
+    """
+    if not data.get("success"):
+        err = data.get("error") or {}
+        sys.exit(f"metalpriceapi error {err.get('code')}: {err.get('info') or data}")
     rates = data.get("rates") or {}
+    inr_per_usd = rates.get("INR")
+    if not inr_per_usd:
+        sys.exit(f"metalpriceapi reply had no INR rate: {data}")
     out = []
     for metal in ("XAU", "XAG"):
-        # rates[metal] is ounces per 1 rupee; INR<metal>, when present, is rupees per ounce.
-        per_ounce = rates.get(f"INR{metal}") or (1 / rates[metal] if rates.get(metal) else None)
-        if not per_ounce:
+        usd_per_ounce = rates.get(f"USD{metal}") or (1 / rates[metal] if rates.get(metal) else None)
+        if not usd_per_ounce:
             sys.exit(f"metalpriceapi reply had no {metal} price: {data}")
-        out.append(per_ounce / GRAMS_PER_TROY_OUNCE)
+        out.append(usd_per_ounce * inr_per_usd / GRAMS_PER_TROY_OUNCE)
     return tuple(out)
 
 
+def metalpriceapi_per_gram(key):
+    # Base stays USD (the documented default), and the key goes in a header so it never shows in logs.
+    data = get_json("https://api.metalpriceapi.com/v1/latest?base=USD&currencies=INR,XAU,XAG",
+                    {"X-API-KEY": key})
+    return metalpriceapi_parse(data)
+
+
+def free_per_gram():
+    """No key needed: live gold and silver in US dollars per ounce from gold-api.com,
+    and the dollar-to-rupee rate (updated once a day) from open.er-api.com."""
+    usd = {}
+    for metal in ("XAU", "XAG"):
+        data = get_json(f"https://api.gold-api.com/price/{metal}")
+        if not data.get("price") or data.get("currency", "USD") != "USD":
+            sys.exit(f"gold-api.com reply had no {metal} price in USD: {data}")
+        usd[metal] = float(data["price"])
+    fx = get_json("https://open.er-api.com/v6/latest/USD")
+    inr = (fx.get("rates") or {}).get("INR") if fx.get("result", "success") == "success" else None
+    if not inr:
+        sys.exit(f"open.er-api.com reply had no INR rate: {fx}")
+    return tuple(usd[m] * inr / GRAMS_PER_TROY_OUNCE for m in ("XAU", "XAG"))
+
+
 def fetch_world(cfg):
+    if cfg["price_feed"] == "free":
+        return free_per_gram()
     key = api_key(cfg)
     if cfg["price_feed"] == "goldapi":
         return goldapi_per_gram(key, "XAU"), goldapi_per_gram(key, "XAG")
