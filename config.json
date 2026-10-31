@@ -3,7 +3,7 @@
  "tagline": "Today's gold and silver price, city by city",
  "site_url": "https://goldpulse.co.in",
  "contact_email": "teraversestudio@gmail.com",
- "ad_placeholders": true,
+ "ad_placeholders": false,
  "featured_city": "chennai",
  "price_feed": "free",
  "premium_percent": 17.21,
