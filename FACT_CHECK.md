@@ -42,3 +42,25 @@ sources. Where sources disagreed, the official one (BIS, GST Council, SEBI, CBIC
 - **Prices on the site are still sample numbers** until the metalpriceapi key is added.
 
 Guides now show "Updated 31 Oct 2026".
+
+## City pages (added 1 Nov 2026)
+
+Each gold and silver city page has a "Buying gold/silver in <city>" section (`content/cities.json`). Only claims
+supported by more than one source were used; exact percentages and shop counts were left out on purpose.
+
+| City | Claim | Source |
+|---|---|---|
+| Chennai | T. Nagar is the best-known jewellery area; Tamil Nadu counts gold in pavan (8 g) | House rules; [IIFL regional units](https://www.iifl.com/blogs/gold-loan/gold-weight-measures-used-in-different-indian-states) |
+| Coimbatore | Major gold jewellery manufacturing centre, known for cast and machine-made jewellery | [Coimbatore district (govt)](https://coimbatore.nic.in/economy/), [India Briefing](https://india-briefing.com/news/investing-in-indias-coimbatore-12406.html) |
+| Madurai | Jewellery shops around the Meenakshi temple: South Masi Street, Town Hall Road | [Jewellery shops in Madurai](https://okcredit.in/blog/jewellery-shops-in-madurai), local rate-site listings |
+| Bengaluru | Nagarathpet has hundreds of jewellers; Commercial Street, Jayanagar showrooms | [Deccan Herald](https://www.deccanherald.com/opinion/the-jewels-of-jayanagar-3727675) |
+| Hyderabad | "City of Pearls"; Pathergatti and Laad Bazaar near Charminar | [Telangana Tourism](https://telanganatourism.gov.in/partials/about/arts-crafts/pearls.html), [Hyderabadi pearls](https://en.wikipedia.org/wiki/Hyderabadi_pearls) |
+| Kerala | Thrissur is Kerala's main gold jewellery manufacturing centre | [Gold business in Thrissur](https://en.wikipedia.org/wiki/Gold_business_in_Thrissur), [Thrissur district (govt)](https://thrissur.nic.in/en/economy/) |
+| Mumbai | Zaveri Bazaar is India's best-known bullion and jewellery market; Dhanteras rush | [Zaveri Bazaar](https://en.wikipedia.org/wiki/Zaveri_Bazaar), [Free Press Journal](https://www.freepressjournal.in/mumbai/mumbai-dhanteras-gold-rush-at-zaveri-bazaar) |
+| Pune | Laxmi Road / Raviwar Peth gold district; Gudi Padwa gold buying | [LBB Pune](https://lbb.in/delhi/wedding-shopping-places-in-pune), [MMTC-PAMP on Gudi Padwa](https://www.mmtcpamp.com/blog/blog-detail/buying-gold-on-gudi-padwa) |
+| Delhi | Dariba Kalan, Chandni Chowk: jewellery lane since Mughal times, known for silver | [Outlook Traveller](https://www.outlooktraveller.com/explore/shopping/explore-indias-oldest-markets-that-are-still-flourishing) |
+| Kolkata | Bowbazar jewellery district; bhori = tola = 11.66 g; Dhanteras bigger than Poila Boishakh | [Bhori](https://en.wikipedia.org/wiki/Bhori), [money9](https://money9.com/news/gold/bengali-new-year-sentiment-for-buying-gold-hurt-as-price-zooms-24002.html) |
+| Ahmedabad | Manek Chowk: bullion and jewellery by day, food market at night | [Ahmedabad heritage (govt)](https://heritage.ahmedabadcity.gov.in/details/97/heritage_site/en) |
+| Jaipur | Johari Bazaar known for Kundan and Meenakari | [Agoda Jaipur markets guide](https://www.agoda.com/travel-guides/india/jaipur/a-guide-to-jaipurs-traditional-markets-from-textiles-to-handicrafts), [Outlook Traveller](https://www.outlooktraveller.com/experiences/shopping/top-five-buys-when-in-jaipur) |
+
+Coimbatore's market name stays blank: no reliable source named a single jewellery street.
