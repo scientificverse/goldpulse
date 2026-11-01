@@ -194,6 +194,46 @@ def day_range(now, f, need):
 GOLD_FN = {k: (lambda k: lambda e: e[k])(k) for k, *_ in GOLD}
 
 
+# ---------- structured data (JSON-LD) and social sharing ----------
+
+SITE_PAGES_UPDATED = "2026-10-31"   # About, Terms and the other site pages
+OG_IMAGE = BASE_URL + "/assets/og-image.png"
+ORG = {"@type": "Organization", "name": "Teraverse Studio", "url": BASE_URL + "/", "email": CFG["contact_email"]}
+PAGE_DATA = {"crumbs": None, "faq": []}   # filled while a page body is built, used and cleared by page()
+LASTMOD = {}                               # page path -> date for the sitemap
+
+
+def plain(html_text):
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", html_text)).split())
+
+
+def jsonld(obj):
+    # "</" is escaped so the data can never close the <script> tag early
+    return ('<script type="application/ld+json">'
+            + json.dumps({"@context": "https://schema.org", **obj}, ensure_ascii=False).replace("</", "<\\/")
+            + "</script>")
+
+
+def page_schema(path, canonical, extra):
+    blocks = []
+    if path == "index.html":
+        blocks.append({"@type": "WebSite", "name": SITE, "url": BASE_URL + "/", "inLanguage": "en-IN", "publisher": ORG})
+        blocks.append(ORG)
+    if PAGE_DATA["crumbs"]:
+        items = []
+        for i, (href, label) in enumerate(PAGE_DATA["crumbs"], 1):
+            url = canonical if not href else BASE_URL + "/" + ("" if href == "index.html" else href)
+            items.append({"@type": "ListItem", "position": i, "name": label, "item": url})
+        blocks.append({"@type": "BreadcrumbList", "itemListElement": items})
+    if PAGE_DATA["faq"]:
+        blocks.append({"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": plain(a)}}
+            for q, a in PAGE_DATA["faq"]]})
+    blocks += extra or []
+    PAGE_DATA["crumbs"], PAGE_DATA["faq"] = None, []
+    return "\n".join(jsonld(b) for b in blocks)
+
+
 # ---------- page shell ----------
 
 PAGES = []   # every written page, for the sitemap
@@ -290,9 +330,10 @@ def ad_rail():
             '<span class="ad-holder">Ad space<br>300 × 600</span></div>')
 
 
-def page(path, section, title, description, body):
+def page(path, section, title, description, body, schema=None, og_type="website"):
     PAGES.append(path)
     canonical = BASE_URL + "/" + ("" if path == "index.html" else path)
+    structured = page_schema(path, canonical, schema)
     nav = [("index.html", "gold", "Gold rates"), ("silver-rate-today.html", "silver", "Silver rates"),
            ("guides.html", "guides", "Guides"), ("gold-weight-converter.html", "tools", "Tools"),
            ("about.html", "about", "About")]
@@ -313,11 +354,21 @@ def page(path, section, title, description, body):
 <title>{E(title)}</title>
 <meta name="description" content="{E(description)}">
 <link rel="canonical" href="{E(canonical)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="{E(SITE)}">
+<meta property="og:locale" content="en_IN">
 <meta property="og:title" content="{E(title)}">
 <meta property="og:description" content="{E(description)}">
 <meta property="og:url" content="{E(canonical)}">
+<meta property="og:image" content="{OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gold Pulse: today's gold and silver rates in India">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{E(title)}">
+<meta name="twitter:description" content="{E(description)}">
+<meta name="twitter:image" content="{OG_IMAGE}">
+{structured}
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#faf7f2">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -609,6 +660,7 @@ def calculator(options, units, weight, making, note, place, date):
 
 
 def faq(items):
+    PAGE_DATA["faq"].extend(items)
     return "".join(f'<details class="faq"><summary>{E(q)}</summary><div>{a}</div></details>' for q, a in items)
 
 
@@ -657,6 +709,7 @@ def guides_about(*words):
 
 
 def crumbs(*parts):
+    PAGE_DATA["crumbs"] = parts
     items = []
     for href, label in parts[:-1]:
         items.append(f'<a href="{href}">{E(label)}</a><span aria-hidden="true">›</span>')
@@ -682,7 +735,7 @@ def gold_city_page(city):
     date = long_date(now["d"])
     last_at = f", updated {clock(now['u'][-1]['t'])}" if now.get("u") else ""
     market_part = f" · {E(city['market'])}" if city.get("market") else ""
-    title = f"Gold Rate Today in {name} ({date}) – 22K & 24K Price | {SITE}"
+    title = f"{name} Gold Rate Today, {short_date(now['d'])}: 22K & 24K | {SITE}"
     desc = (f"Gold rate in {name} today, {date}: 22 carat {rupees(now['k22'])} and 24 carat "
             f"{rupees(now['k24'])} per gram. Price by weight, last 10 days, 7 and 30-day chart and calculator.")
     silver_box = ""
@@ -798,10 +851,10 @@ def home_page():
     now, _ = now_prev(gold_hist(feat["slug"]))
     date = long_date(now["d"])
     last_at = f"Updated {clock(now['u'][-1]['t'])}" if now.get("u") else f"Updated {date}"
-    cards = "".join(gold_card(feat["slug"], k, 3, gold_url(feat) + "#calculator") for k, *_ in GOLD)
+    cards = "".join(gold_card(feat["slug"], k, 2, gold_url(feat) + "#calculator") for k, *_ in GOLD)
     if FEATURED_SILVER:
-        cards += silver_card(FEATURED_SILVER["slug"], 3, silver_url(FEATURED_SILVER), "See silver rate")
-    title = f"Gold Rate Today ({date}) – 22K, 24K Gold & Silver Price in India | {SITE}"
+        cards += silver_card(FEATURED_SILVER["slug"], 2, silver_url(FEATURED_SILVER), "See silver rate")
+    title = f"Gold Rate Today in India, {short_date(now['d'])}: 22K, 24K & Silver | {SITE}"
     desc = (f"Today's gold and silver rate in {len(GOLD_CITIES)} Indian cities, {date}. {feat['name']}: 22 carat "
             f"{rupees(now['k22'])}, 24 carat {rupees(now['k24'])} per gram. Updated {times_word()} a day.")
     questions = [
@@ -875,7 +928,7 @@ def silver_city_page(city):
     now, prev = now_prev(hist)
     date = long_date(now["d"])
     last_at = f", updated {clock(now['u'][-1]['t'])}" if now.get("u") else ""
-    title = f"Silver Rate Today in {name} ({date}) – Price per Gram & Kg | {SITE}"
+    title = f"{name} Silver Rate Today, {short_date(now['d'])}: Gram & Kg | {SITE}"
     desc = (f"Silver rate in {name} today, {date}: {rupees(silver_g(now), 2)} per gram and {rupees(now['s'])} per kg. "
             "Price by weight, last 10 days, 7 and 30-day chart and calculator.")
     weight_rows = []
@@ -966,10 +1019,11 @@ def silver_home():
     feat = FEATURED_SILVER
     now, _ = now_prev(silver_hist(feat["slug"]))
     date = long_date(now["d"])
-    title = f"Silver Rate Today ({date}) – Price per Gram & Kg in Indian Cities | {SITE}"
+    title = f"Silver Rate Today in India, {short_date(now['d'])}: Gram & Kg | {SITE}"
     desc = (f"Today's silver rate in {len(SILVER_CITIES)} Indian cities, {date}. {feat['name']}: "
             f"{rupees(silver_g(now), 2)} per gram, {rupees(now['s'])} per kg. Updated {times_word()} a day.")
-    body = f"""<header class="top-head">
+    body = f"""{crumbs(("index.html", "Home"), ("", "Silver rates"))}
+<header class="top-head">
   <div>
     <span class="section-tag">{E(feat['name'])} · {date} · fine 999 and sterling 925</span>
     <h1>Silver Rate <span class="gold-text">Today</span></h1>
@@ -978,7 +1032,7 @@ def silver_home():
 </header>
 
 <section aria-label="Today's silver price in {E(feat['name'])}">
-  <div class="cards cards-2">{silver_card(feat['slug'], 3, silver_url(feat) + "#calculator", "Work out silver price")}{silver_card(feat['slug'], 3, silver_url(feat) + "#calculator", "Work out sterling silver price", sterling=True)}</div>
+  <div class="cards cards-2">{silver_card(feat['slug'], 2, silver_url(feat) + "#calculator", "Work out silver price")}{silver_card(feat['slug'], 2, silver_url(feat) + "#calculator", "Work out sterling silver price", sterling=True)}</div>
   <p class="ref-note">Rates are for reference and don't include {GST}% GST or making charges; check with your shop before buying.
   <a href="{silver_url(feat)}">Full {E(feat['name'])} silver page →</a> · Last update {updated_text()}.</p>
 </section>
@@ -1011,6 +1065,7 @@ def guide_pages():
   <p class="lede">Plain-language guides on how gold prices work, buying and selling jewellery safely, purity, hallmarks and taxes. Written for buyers, not traders.</p>
 </header>
 {sections}"""
+    LASTMOD["guides.html"] = max(g.get("updated", GUIDES_UPDATED) for g in GUIDES)
     write("guides.html", page("guides.html", "guides", f"Gold and Silver Buying Guides | {SITE}",
                               "Simple guides on gold rates, hallmarks, making charges, GST, selling old gold and silver purity.", body))
 
@@ -1045,7 +1100,14 @@ bank or a qualified adviser before big decisions.</p>
   <h2>Read next</h2>
   {guide_cards(related[:3])}
 </section>"""
-        write(f"{g['slug']}.html", page(f"{g['slug']}.html", "guides", f"{g['title']} | {SITE}", g["description"], body))
+        gpath = f"{g['slug']}.html"
+        LASTMOD[gpath] = updated
+        article = {"@type": "Article", "headline": g["title"], "description": g["description"],
+                   "datePublished": g.get("published", "2026-10-30"), "dateModified": updated,
+                   "author": ORG, "publisher": ORG, "image": OG_IMAGE, "inLanguage": "en-IN",
+                   "mainEntityOfPage": BASE_URL + "/" + gpath}
+        gtitle = g["title"] if len(g["title"]) > 52 else f"{g['title']} | {SITE}"
+        write(gpath, page(gpath, "guides", gtitle, g["description"], body, schema=[article], og_type="article"))
 
 
 # ---------- tools ----------
@@ -1148,14 +1210,16 @@ def tools_pages():
 # ---------- site pages ----------
 
 def text_page(path, title, h1, inner, desc):
-    body = f"""<header class="page-head"><h1>{E(h1)}</h1></header>
+    body = f"""{crumbs(("index.html", "Home"), ("", h1))}
+<header class="page-head"><h1>{E(h1)}</h1></header>
 <article class="prose">{inner}</article>"""
-    write(path, page(path, "about", f"{title} | {SITE}", desc, body))
+    LASTMOD[path] = SITE_PAGES_UPDATED
+    write(path, page(path, "about", title if SITE in title else f"{title} | {SITE}", desc, body))
 
 
 def legal_pages():
     email = E(CFG["contact_email"])
-    text_page("about.html", "About us", f"About {SITE}", f"""
+    text_page("about.html", f"About {SITE}: Who We Are and How Prices Are Set", f"About {SITE}", f"""
 <p>{E(SITE)} shows the price of gold and silver for {len(GOLD_CITIES)} Indian cities in one simple place: today's rate,
 the price by weight, today's updates, the last 10 days and charts of how the price has moved. We also write plain-language
 <a href="guides.html">guides</a> for people buying or selling jewellery, and offer free
@@ -1178,15 +1242,17 @@ We built Gold Pulse to give families one simple, honest place to check gold and 
 <p>Questions, corrections or ideas: <a href="mailto:{email}">{email}</a></p>
 <h2>Independence</h2>
 <p>We are not a jewellery shop and we don't sell gold. We are not paid by any jeweller to show their prices.</p>
-""", f"About {SITE}: how we work out daily gold and silver rates.")
-    text_page("disclaimer.html", "Disclaimer", "Disclaimer", f"""
+""", f"{SITE} is run by Teraverse Studio, India. See how we work out daily gold and silver rates for "
+       f"{len(GOLD_CITIES)} cities and how we keep them correct.")
+    text_page("disclaimer.html", "Disclaimer: Our Rates Are a Guide", "Disclaimer", f"""
 <p>The gold and silver prices on {E(SITE)} are a guide only. They are worked out from public world prices and may be
 different from the price at any shop, bank or market. They do not include GST, making charges or other fees.</p>
 <p>We try to keep the numbers and guides correct, but we cannot promise that they are always right or up to date.
 Please check the price with your jeweller before you buy or sell.</p>
 <p>Nothing on this site is financial, tax or legal advice. For decisions about your money, speak to a qualified adviser.
 We are not responsible for any loss from using the information on this site.</p>
-""", f"{SITE} prices and guides are for information only.")
+""", f"{SITE} gold and silver prices and guides are for information only. They don't include GST or "
+       "making charges, so check with your jeweller before you buy or sell.")
     text_page("privacy.html", "Privacy policy", "Privacy policy", f"""
 <p>{E(SITE)} does not ask for your name and does not need an account. The calculators and converters run only inside
 your browser; nothing you type in them is sent to us.</p>
@@ -1216,12 +1282,13 @@ pages or guides to other websites without permission.</p>
 <h2>Changes</h2>
 <p>We may update these terms. The latest version is always on this page.</p>
 <p>Questions: <a href="mailto:{email}">{email}</a></p>
-""", f"Terms of use for {SITE}.")
-    text_page("contact.html", "Contact", "Contact us", f"""
+""", f"Terms of use for {SITE}: how you may use our gold and silver prices, charts, calculators and guides.")
+    text_page("contact.html", f"Contact {SITE}: Report a Price or Ask a Question", "Contact us", f"""
 <p>Found a wrong price or a mistake in a guide, or want your city added? Send us an email:</p>
 <p class="big-link"><a href="mailto:{email}">{email}</a></p>
 <p>For prices, please tell us the city, the date and the price you saw.</p>
-""", f"Contact {SITE}.")
+""", f"Email {SITE} (run by Teraverse Studio) to report a wrong price or a mistake in a guide, "
+       "or to ask us to add your city.")
     write("404.html", page("404.html", "", f"Page not found | {SITE}", "This page does not exist.",
           '<header class="page-head"><h1>Page not found</h1></header>'
           '<p>This page does not exist. <a href="index.html">See today\'s gold rate</a> or <a href="guides.html">browse our guides</a>.</p>'))
@@ -1230,7 +1297,7 @@ pages or guides to other websites without permission.</p>
 
 def seo_files():
     latest = max(gold_hist(c["slug"])[0]["d"] for c in GOLD_CITIES)
-    urls = "".join(f"<url><loc>{E(BASE_URL + '/' + ('' if p == 'index.html' else p))}</loc><lastmod>{latest}</lastmod></url>"
+    urls = "".join(f"<url><loc>{E(BASE_URL + '/' + ('' if p == 'index.html' else p))}</loc><lastmod>{LASTMOD.get(p, latest)}</lastmod></url>"
                    for p in PAGES)
     write("sitemap.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n'
                          f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
@@ -1240,8 +1307,11 @@ def seo_files():
 def main():
     if not GOLD_CITIES:
         raise SystemExit("data/rates.json has no gold prices yet. Run: python tools/update_rates.py demo")
-    if OUT.exists():
-        shutil.rmtree(OUT)
+    # Empty site/ but keep the folder itself: on Windows a preview server or terminal
+    # sitting in it would otherwise stop the folder from being deleted.
+    OUT.mkdir(exist_ok=True)
+    for child in OUT.iterdir():
+        shutil.rmtree(child) if child.is_dir() else child.unlink()
     shutil.copytree(STATIC, OUT / "assets")
     if (ROOT / "_headers").exists():
         shutil.copy(ROOT / "_headers", OUT / "_headers")
