@@ -25,6 +25,8 @@ CFG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 RATES = json.loads((ROOT / "data" / "rates.json").read_text(encoding="utf-8"))
 GUIDES = json.loads((CONTENT / "guides.json").read_text(encoding="utf-8"))
 GUIDES_UPDATED = "2026-10-31"
+CITY_FILE = CONTENT / "cities.json"
+CITY_TEXT = json.loads(CITY_FILE.read_text(encoding="utf-8")) if CITY_FILE.exists() else {}
 
 E = html.escape
 SITE = CFG["site_name"]
@@ -717,6 +719,15 @@ def crumbs(*parts):
     return f'<nav class="crumbs" aria-label="Breadcrumb">{"".join(items)}</nav>'
 
 
+def city_story(city, metal):
+    """A short paragraph about buying gold or silver in this city (content/cities.json)."""
+    text = CITY_TEXT.get(city["slug"], {}).get(metal)
+    if not text:
+        return ""
+    return (f'<section class="block" id="about-city"><h2>Buying {metal} in {E(city["name"])}</h2>'
+            f'<div class="prose city-story">{text}</div></section>')
+
+
 def search_head(h2_id, heading, tag=""):
     tag_html = f'<span class="section-tag">{tag}</span>' if tag else ""
     return f"""<div class="block-head">
@@ -789,6 +800,8 @@ def gold_city_page(city):
   {table(f"Gold price in {E(name)} by weight on {date}", "Gold price by weight",
          ["Weight", "24 Carat", "22 Carat", "18 Carat"], weight_rows)}
 </section>
+
+{city_story(city, "gold")}
 
 <section class="block" id="trend">
   <h2>Gold price trend in {E(name)}</h2>
@@ -977,6 +990,8 @@ def silver_city_page(city):
   <h2>Silver price in {E(name)} by weight</h2>
   {table(f"Silver price in {E(name)} by weight on {date}", "Silver price by weight", ["Weight", "Price"], weight_rows)}
 </section>
+
+{city_story(city, "silver")}
 
 <section class="block" id="trend">
   <h2>Silver price trend in {E(name)}</h2>

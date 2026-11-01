@@ -1,0 +1,50 @@
+{
+  "chennai": {
+    "gold": "<p>T. Nagar is Chennai's best-known place to buy gold, with large jewellery showrooms close together. Like the rest of Tamil Nadu, Chennai families usually count jewellery in <strong>pavan</strong> (1 pavan = 8 grams), so a wedding list might read \"20 pavan\" rather than 160 grams.</p><p>Most jewellery sold here is 22 carat. Demand is highest during the wedding season and on Akshaya Tritiya, when showrooms are crowded, so it helps to check the hallmark and HUID calmly before you pay, or visit on a quieter day.</p>",
+    "silver": "<p>In Chennai, silver is bought mostly as <em>kolusu</em> (anklets), <em>metti</em> (toe rings), pooja items and gifts for ceremonies. Small silver coins are also popular gifts at weddings and housewarmings.</p><p>Shop prices for silver jewellery include making charges that can be large compared with the metal value, so ask for the weight, purity (925 or higher) and making charge separately.</p>"
+  },
+  "coimbatore": {
+    "gold": "<p>Coimbatore is one of India's major gold jewellery <strong>manufacturing</strong> centres, known especially for cast and machine-made jewellery. Thousands of small workshops and goldsmiths in and around the city make lightweight designs that are sold in shops across the country.</p><p>As elsewhere in Tamil Nadu, jewellery here is usually counted in pavan (8 grams). Because many pieces are machine-made, making charges on simple everyday designs can be lower than on handmade work, so compare two or three shops for the same design.</p>",
+    "silver": "<p>In Coimbatore, silver anklets, toe rings, lamps and pooja articles are common purchases for festivals and family functions.</p><p>For silver, ask the shop to show the purity mark and weigh the item in front of you. Plain items are usually priced closer to the silver rate than detailed handmade designs.</p>"
+  },
+  "madurai": {
+    "gold": "<p>In Madurai, jewellery shops cluster in the old streets around the Meenakshi Amman Temple, especially South Masi Street and Town Hall Road. The area is known for traditional South Indian designs, including temple-style jewellery, alongside modern showrooms.</p><p>Families here count gold in pavan (8 grams), and wedding and festival seasons bring the biggest crowds. Traditional and temple designs usually involve more handwork, so expect higher making charges than for plain chains or bangles.</p>",
+    "silver": "<p>The streets around South Masi Street also have long-running silver shops selling anklets, toe rings, lamps, idols and pooja vessels.</p><p>Many silver items for temple and home worship are high-purity silver. Check the purity mark, and ask for the weight and making charge on the bill.</p>"
+  },
+  "bengaluru": {
+    "gold": "<p>Nagarathpet, in Bengaluru's old city, is home to hundreds of jewellers and goldsmiths and is the traditional place to have jewellery made or repaired. Newer showrooms are spread across areas such as Commercial Street and Jayanagar.</p><p>In Bengaluru, jewellery is priced and billed in grams. Ugadi, Akshaya Tritiya and the wedding season are busy buying times. If you order a custom piece in the old city, agree on the weight range, purity, making charge and delivery date in writing.</p>",
+    "silver": "<p>Silver in Bengaluru is bought for festivals, pooja articles, gifts and everyday anklets and toe rings.</p><p>Ask for silver to be billed by weight with the purity mark shown, and compare the making charge between two shops for the same design.</p>"
+  },
+  "hyderabad": {
+    "gold": "<p>Hyderabad is known as the \"City of Pearls\", and the old markets around Charminar, such as Pathergatti and Laad Bazaar, are famous for pearl and gold jewellery. Sets that combine gold with pearls, such as long <em>rani haar</em> necklaces, are a local speciality.</p><p>When a piece mixes gold with pearls or stones, ask for the gold weight and the pearl or stone weight separately. Only the gold should be charged at the gold rate.</p>",
+    "silver": "<p>Silver in Hyderabad is popular for pooja items, gifts and traditional jewellery.</p><p>In crowded markets, take a proper bill with the weight and purity of each item, and be careful with very low prices, which can mean lower purity or silver-plated items.</p>"
+  },
+  "kerala": {
+    "gold": "<p>Kerala families are among India's biggest gold buyers, especially for weddings, where heavy 22 carat jewellery is traditional. Thrissur is the state's main gold jewellery manufacturing centre, with thousands of workshops and artisans.</p><p>As in Tamil Nadu, jewellery here is usually counted in pavan (8 grams). Onam, Akshaya Tritiya and the wedding season are the busiest buying times. Because purchases are often large, check the HUID of every piece and keep the bill safely.</p>",
+    "silver": "<p>In Kerala, silver is bought mainly for anklets, toe rings, children's ornaments and pooja items, while gold remains the first choice for weddings.</p><p>Small silver items often carry high making charges compared with their metal value, so ask for the weight and making charge on the bill.</p>"
+  },
+  "mumbai": {
+    "gold": "<p>Mumbai's Zaveri Bazaar, in the old Kalbadevi and Bhuleshwar area, is India's best-known bullion and jewellery market, and a large share of the country's gold trade passes through it. Hundreds of jewellers, wholesalers and bullion dealers work in its lanes.</p><p>Gudi Padwa, Akshaya Tritiya and Dhanteras bring heavy crowds. Older buyers sometimes still talk in tola (11.66 grams), but bills are always in grams. In a busy market, insist on a proper bill with the HUID of each piece.</p>",
+    "silver": "<p>Zaveri Bazaar also trades silver bars, coins and articles, and many families buy silver coins or utensils on Dhanteras and Diwali.</p><p>Silver coins and bars are usually 999 fine silver; jewellery and gift items are often 925. Check the purity mark and ask for it on the bill.</p>"
+  },
+  "pune": {
+    "gold": "<p>Laxmi Road and the nearby lanes of Raviwar Peth are Pune's traditional gold district, where some of Maharashtra's oldest jewellery houses trade next to national chains. Raviwar Peth is also known for gold coins and lightweight everyday jewellery.</p><p>Many Pune families buy a little gold every Gudi Padwa, and Akshaya Tritiya and Dhanteras are also busy days. Shops on Laxmi Road usually follow a similar daily rate, so the real difference between them is the making charge.</p>",
+    "silver": "<p>Silver shops around Laxmi Road and Raviwar Peth sell coins, pooja items, anklets and gift articles, which are popular for Gudi Padwa, Diwali and family ceremonies.</p><p>Compare the making charge, not just the silver rate, and check the purity mark on each item.</p>"
+  },
+  "delhi": {
+    "gold": "<p>Dariba Kalan, a narrow lane in Old Delhi's Chandni Chowk, has been a jewellery market since Mughal times and is still known for gold and silver work, including Kundan and Meenakari pieces. Modern showrooms are spread across the rest of the city.</p><p>In North India, Dhanteras is the biggest gold-buying day of the year, and coins and small pieces sell fast. Older buyers may talk in tola (11.66 grams), but bills are in grams. Check the hallmark and HUID even on small purchases.</p>",
+    "silver": "<p>Dariba Kalan is historically famous for silver, and Delhi has a strong tradition of buying silver coins and utensils on Dhanteras and Diwali, especially coins with images of Lakshmi and Ganesha.</p><p>Gift coins come in different purities and finishes, so check the purity and weight printed on the pack, and keep the bill if you may sell them later.</p>"
+  },
+  "kolkata": {
+    "gold": "<p>Bowbazar, around B.B. Ganguly Street, is Kolkata's jewellery district, and for many families a visit there is part of every wedding. Bengal's goldsmiths have a long reputation for fine handwork.</p><p>In Bengal, gold is traditionally counted in <strong>bhori</strong> (also said vori), which is the same as a tola: about 11.66 grams. Dhanteras is the biggest gold-buying day, while Poila Boishakh (Bengali New Year) is popular for smaller pieces. Detailed handmade designs carry higher making charges, so ask for them in writing.</p>",
+    "silver": "<p>Bowbazar's jewellers also sell silver ornaments, and silver is a common gift for weddings, rice-feeding ceremonies (<em>annaprashan</em>) and festivals.</p><p>Ask for the weight in grams, the purity and the making charge on the bill.</p>"
+  },
+  "ahmedabad": {
+    "gold": "<p>Manek Chowk in old Ahmedabad is one of the city's busiest markets for bullion and gold and silver jewellery by day, and turns into a famous food market at night after the jewellery shops close.</p><p>In Gujarat, Diwali and Dhanteras are the main gold-buying days. Older buyers often talk in tola (11.66 grams), but bills are in grams.</p>",
+    "silver": "<p>Manek Chowk's bullion and jewellery trade includes silver, and silver coins, utensils and pooja items are popular purchases for Dhanteras, Diwali and weddings in Ahmedabad.</p><p>Silver coins and bars are usually 999 fine silver. For jewellery and articles, check the purity mark and the making charge.</p>"
+  },
+  "jaipur": {
+    "gold": "<p>Johari Bazaar, whose name means \"jewellers' market\", is Jaipur's historic jewellery street, known especially for <strong>Kundan</strong> and <strong>Meenakari</strong> work. Jaipur is also one of the world's main centres for cutting and trading coloured gemstones.</p><p>Kundan and gemstone pieces combine gold with stones and enamel, so ask for the gold weight and purity separately from the stones. Only the gold should be priced at the gold rate.</p>",
+    "silver": "<p>Jaipur is well known for silver jewellery, from traditional Rajasthani designs to gemstone-set pieces, and Johari Bazaar has many silver sellers.</p><p>Much of this jewellery is 925 sterling silver, sometimes set with stones. Ask for the purity and the silver weight without the stones on your bill.</p>"
+  }
+}
