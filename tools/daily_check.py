@@ -136,8 +136,9 @@ def check_live_page(base, entry, today_long):
         return
     if "sample-note" in html:
         report("FAIL", "Live Chennai page still shows the 'Sample prices' note")
-    m = re.search(r"<title>Gold Rate Today in Chennai \(([^)]+)\)", html)
-    if not m or m.group(1) != today_long:
+    # Title is "Chennai Gold Rate Today, 3 Nov: ..." (no year), so compare day + month only
+    m = re.search(r"<title>Chennai Gold Rate Today, (\d{1,2} \w{3})\b", html)
+    if not m or m.group(1) != today_long.rsplit(" ", 1)[0]:
         report("FAIL", f"Live Chennai page shows date {m.group(1) if m else '?'}, expected {today_long}")
         actions.append("REBUILD")
     else:
